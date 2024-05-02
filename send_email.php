@@ -1,16 +1,15 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["email"])) {
-    $to = $_POST["email"];
-    $subject = "Sikeres regisztráció";
-    $message = "Kedves felhasználó!\n\nSikeresen regisztráltál a szolgáltatásunkra. Köszönjük, hogy csatlakoztál!\n\nÜdvözlettel,\nA csapat";
+// Beolvasni az e-mail címet
+$email = $_POST['email'];
 
-    // Ellenőrizzük, hogy az e-mail sikeresen elküldhető-e
-    if (mail($to, $subject, $message)) {
-        echo json_encode(array("success" => true, "message" => "Az üzenet sikeresen elküldve"));
-    } else {
-        echo json_encode(array("success" => false, "message" => "Hiba történt az üzenet küldése közben"));
-    }
-} else {
-    echo json_encode(array("success" => false, "message" => "Hibás kérés"));
-}
+// Elküldeni az e-mailt a sablon alapján
+// Például:
+$to = $email;
+$subject = "Sikeres regisztráció";
+$message = file_get_contents("sablon.html"); // Olvassa be az HTML sablont
+$headers = "MIME-Version: 1.0" . "\r\n";
+$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+$headers .= 'From: yourname@example.com' . "\r\n"; // Saját e-mail címed
+
+mail($to, $subject, $message, $headers);
 ?>
